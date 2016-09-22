@@ -1,0 +1,83 @@
+# https://github.com/ogrisel/python-appveyor-demo/blob/master/appveyor.yml
+
+environment:
+
+  global:
+
+    # SDK v7.0 MSVC Express 2008's SetEnv.cmd script will fail if the
+    # /E:ON and /V:ON options are not enabled in the batch script intepreter
+    # See: http://stackoverflow.com/a/13751649/163740
+    HELPER_CMD: "cmd /E:ON /V:ON /C .\\ci\\helper.cmd"
+
+  matrix:
+
+    - PYTHON: "C:\\Python33"
+      PYTHON_VERSION: "3.3.x"
+      PYTHON_ARCH: "32"
+
+    - PYTHON: "C:\\Python33-x64"
+      PYTHON_VERSION: "3.3.x"
+      PYTHON_ARCH: "64"
+
+    - PYTHON: "C:\\Python34"
+      PYTHON_VERSION: "3.4.x"
+      PYTHON_ARCH: "32"
+
+    - PYTHON: "C:\\Python34-x64"
+      PYTHON_VERSION: "3.4.x"
+      PYTHON_ARCH: "64"
+
+    - PYTHON: "C:\\Python35"
+      PYTHON_VERSION: "3.5.x"
+      PYTHON_ARCH: "32"
+
+    - PYTHON: "C:\\Python35-x64"
+      PYTHON_VERSION: "3.5.x"
+      PYTHON_ARCH: "64"
+
+install:
+
+  - ps: "ls \"C:/Python*\""
+  - ps: "ls \"C:/Program Files/Microsoft SDKs/Windows\""
+
+  - "SET PATH=%PYTHON%;%PYTHON%\\Scripts;%PATH%"
+  - "pip install pip setuptools --upgrade"
+
+  - "python -c \"import sys; sys.stdout.write(sys.version);\""
+  - "pip --version"
+  - "easy_install --version"
+  - "pip freeze"
+
+build_script:
+
+  # Build project
+  - "%HELPER_CMD% python setup.py build"
+
+before_test:
+
+  # Install testing requirements
+  - "%HELPER_CMD% pip install -r .\\ci\\requirements.txt"
+
+test_script:
+
+  # Run the project tests
+  - "%HELPER_CMD% set PYTHONPATH=py2exe && python -m nose --with-xunit || exit /b 0"
+  - ps: |
+        $wc = New-Object "System.Net.WebClient"
+        $url = "https://ci.appveyor.com/api/testresults/junit/$($env:APPVEYOR_JOB_ID)"
+        $wc.UploadFile($url, (Resolve-Path .\nosetests.xml))
+        if ($res.FailedCount -gt 0) { 
+            throw "$($res.FailedCount) tests failed."
+        }
+
+after_test:
+
+  - "python setup.py check -m -r -s"
+  - "python setup.py sdist"
+  - "python setup.py bdist_wheel"
+  - "python setup.py bdist_wininst"
+  - "python setup.py bdist_msi"
+  - ps: "ls dist"
+
+#artifacts:
+#on_success:
