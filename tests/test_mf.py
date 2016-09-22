@@ -1,7 +1,7 @@
 #!/usr/bin/python3.3
 import unittest
 
-from mf import ModuleFinder
+from py2exe.mf3 import ModuleFinder
 
 class MFTest(unittest.TestCase):
 
