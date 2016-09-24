@@ -11,6 +11,7 @@ if sys.version_info < (3, 3):
 
 ############################################################################
 
+from distutils.msvccompiler import get_build_version
 from setuptools import setup
 ##from distutils.core import setup
 
@@ -124,6 +125,11 @@ resource_dll = Interpreter("py2exe.resources",
 
 interpreters = [run, run_w, resource_dll,
                 run_ctypes_dll]
+
+if get_build_version() == 14.0:
+    for interp in interpreters:
+        if interp.target_desc == "shared_library":
+            interp.extra_link_args.append("/DLL")
 
 try:
     from wheel import bdist_wheel
