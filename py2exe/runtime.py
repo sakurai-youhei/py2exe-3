@@ -423,7 +423,7 @@ class Runtime(object):
                 arc.writestr(path, stream.getvalue())
 
             elif hasattr(mod, "__file__"):
-                assert mod.__file__.endswith(EXTENSION_SUFFIXES[0])
+                assert any(mod.__file__.endswith(ext) for ext in EXTENSION_SUFFIXES)
                 if self.options.bundle_files <= 2:
                     # put .pyds into the archive
                     arcfnm = mod.__name__.replace(".", "\\") + EXTENSION_SUFFIXES[0]

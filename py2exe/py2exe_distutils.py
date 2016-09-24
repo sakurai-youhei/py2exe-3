@@ -174,7 +174,7 @@ class BuildInterpreters(build_ext.build_ext):
         # that CCompiler object -- that way, they automatically apply to
         # all compiling and linking done here.
         if self.include_dirs is not None:
-            self.compiler.set_include_dirs(self.include_dirs)
+            self.compiler.include_dirs.extend(self.include_dirs)
         if self.define is not None:
             # 'define' option is a list of (name, value) tuples
             for (name,value) in self.define:
@@ -183,13 +183,13 @@ class BuildInterpreters(build_ext.build_ext):
             for macro in self.undef:
                 self.compiler.undefine_macro(macro)
         if self.libraries is not None:
-            self.compiler.set_libraries(self.libraries)
+            self.compiler.libraries.extend(self.libraries)
         if self.library_dirs is not None:
-            self.compiler.set_library_dirs(self.library_dirs)
+            self.compiler.library_dirs.extend(self.library_dirs)
         if self.rpath is not None:
-            self.compiler.set_runtime_library_dirs(self.rpath)
+            self.compiler.runtime_library_dirs.extend(self.rpath)
         if self.link_objects is not None:
-            self.compiler.set_link_objects(self.link_objects)
+            self.compiler.link_objects.extend(self.link_objects)
 
     # setup_compiler()
 
