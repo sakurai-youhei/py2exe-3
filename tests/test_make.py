@@ -209,7 +209,8 @@ class SimpleTests(unittest.TestCase):
     def test_sys2(self):
         mf = ModuleFinder()
 ##        # This raises ImportError:
-        mf.import_hook("os.path")
+        with self.assertRaises(ImportError):
+            mf.import_hook("os.path")
         self.assertNotIn("os.path", mf.missing())
         self.assertIn("posix", mf.missing())
 

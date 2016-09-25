@@ -251,7 +251,7 @@ class ModuleFinderTest(unittest.TestCase):
             self.assertEqual(found, modules)
 
             # check for missing and maybe missing modules
-            bad, maybe = mf.any_missing_maybe()
+            bad, maybe = mf.missing_maybe()
             self.assertEqual(bad, missing)
             self.assertEqual(maybe, maybe_missing)
         finally:
