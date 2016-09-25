@@ -1,6 +1,8 @@
 py2exe for Python 3
 ===================
 
+|Build status|
+
 `py2exe` is a distutils extension which allows to build standalone
 Windows executable programs (32-bit and 64-bit) from Python scripts;
 Python 3.3 and later are supported.  It can build console executables,
@@ -252,3 +254,6 @@ Building isapi extensions is not supported: I don't use them so I will
 not implement this.
 
 The modulefinder does not yet support PEP420 implicit namespace packages.
+
+.. |Build status| image:: https://img.shields.io/appveyor/ci/sakurai_youhei/py2exe-3/develop.svg?label=Python%203.3%20to%203.5%20%2F%20win32%20%26%20win_amd64
+   :target: https://ci.appveyor.com/project/sakurai_youhei/py2exe-3/branch/develop
