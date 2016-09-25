@@ -66,8 +66,12 @@ test_script:
         $wc = New-Object "System.Net.WebClient"
         $url = "https://ci.appveyor.com/api/testresults/junit/$($env:APPVEYOR_JOB_ID)"
         $wc.UploadFile($url, (Resolve-Path .\nosetests.xml))
-        if ($res.FailedCount -gt 0) { 
-            throw "$($res.FailedCount) tests failed."
+        $result = [xml](Get-Content .\nosetests.xml)
+        $skip = $result.testsuite.skip
+        $errors = $result.testsuite.errors
+        $failures = $result.testsuite.failures
+        if ($errors -gt 0 -or $failures -gt 0) { 
+            throw "FAILED (SKIP=$($skip), errors=$($errors), failures=$($failures))"
         }
 
 after_test:
