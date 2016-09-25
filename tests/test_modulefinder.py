@@ -6,11 +6,10 @@ import sys
 import tempfile
 import unittest
 
-##import modulefinder
 import py2exe.mf3 as modulefinder
 
 TEST_DIR = tempfile.mkdtemp()
-TEST_PATH = [TEST_DIR]#, os.path.dirname(tempfile.__file__)]
+TEST_PATH = [TEST_DIR]  # , os.path.dirname(tempfile.__file__)]
 
 print("TEST_PATH is", TEST_PATH)
 
@@ -89,22 +88,22 @@ absolute_import_test = [
 mymodule.py
 a/__init__.py
 a/module.py
-                                from __future__ import absolute_import
-                                import sys # sys
-                                import blahblah # fails
-                                import gc # gc
-                                import b.x # b.x
-                                from b import y # b.y
-                                from b.z import * # b.z.*
+    from __future__ import absolute_import
+    import sys # sys
+    import blahblah # fails
+    import gc # gc
+    import b.x # b.x
+    from b import y # b.y
+    from b.z import * # b.z.*
 a/gc.py
 a/sys.py
-                                import mymodule
+    import mymodule
 a/b/__init__.py
 a/b/x.py
 a/b/y.py
 a/b/z.py
 b/__init__.py
-                                import z
+    import z
 b/unused.py
 b/x.py
 b/y.py
@@ -124,24 +123,24 @@ relative_import_test = [
     """\
 mymodule.py
 a/__init__.py
-                                from .b import y, z # a.b.y, a.b.z
+    from .b import y, z # a.b.y, a.b.z
 a/module.py
-                                from __future__ import absolute_import # __future__
-                                import gc # gc
+    from __future__ import absolute_import # __future__
+    import gc # gc
 a/gc.py
 a/sys.py
 a/b/__init__.py
-                                from ..b import x # a.b.x
-                                #from a.b.c import moduleC
-                                from .c import moduleC # a.b.moduleC
+    from ..b import x # a.b.x
+    #from a.b.c import moduleC
+    from .c import moduleC # a.b.moduleC
 a/b/x.py
 a/b/y.py
 a/b/z.py
 a/b/g.py
 a/b/c/__init__.py
-                                from ..c import e # a.b.c.e
+    from ..c import e # a.b.c.e
 a/b/c/moduleC.py
-                                from ..c import d # a.b.c.d
+    from ..c import d # a.b.c.d
 a/b/c/d.py
 a/b/c/e.py
 a/b/c/x.py
@@ -232,19 +231,19 @@ class ModuleFinderTest(unittest.TestCase):
         sys_path = sys.path[:]
         sys.path.insert(0, TEST_DIR)
         try:
-            mf = modulefinder.ModuleFinder()#path=TEST_PATH)
+            mf = modulefinder.ModuleFinder()  # path=TEST_PATH)
             mf.import_hook(import_this)
             if report:
                 mf.report()
-##                # This wouldn't work in general when executed several times:
-##                opath = sys.path[:]
-##                sys.path = TEST_PATH
-##                try:
-##                    __import__(import_this)
-##                except:
-##                    import traceback; traceback.print_exc()
-##                sys.path = opath
-##                return
+                # This wouldn't work in general when executed several times:
+                # opath = sys.path[:]
+                # sys.path = TEST_PATH
+                # try:
+                #     __import__(import_this)
+                # except:
+                #     import traceback; traceback.print_exc()
+                # sys.path = opath
+                # return
             modules = sorted(set(modules))
             found = sorted(mf.modules)
             # check if we found what we expected, not more, not less
@@ -282,8 +281,8 @@ class ModuleFinderTest(unittest.TestCase):
         self._do_test(relative_import_test_3)
 
 
-## def test_main():
-##     support.run_unittest(ModuleFinderTest)
+# def test_main():
+#     support.run_unittest(ModuleFinderTest)
 
 if __name__ == "__main__":
     unittest.main()

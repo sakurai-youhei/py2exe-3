@@ -4,6 +4,7 @@ import unittest
 from py2exe.mf3 import ModuleFinder
 from tests.test_make import _TestPackageBase, Test_PEP328 as _PEP328
 
+
 class MFTest(_TestPackageBase):
     data = """
     testmods/test_tools.py
@@ -38,7 +39,7 @@ class MFTest(_TestPackageBase):
         global names, which are imported from string, inspect,
         and others.
         """
-        
+
         mf = ModuleFinder()
         mf.import_hook("collections")
         modules = set([name for name in mf.modules
@@ -53,7 +54,7 @@ class MFTest(_TestPackageBase):
     def test_tools(self):
         """
         check that these are not reported as missing modules:
-        
+
         - testmods.tools.bar
         - testmods.tools.baz
         - testmods.tools.spam
@@ -69,6 +70,7 @@ class MFTest(_TestPackageBase):
             "testmods.tools.bazbar",
             "testmods.tools.spamfoo"})
         self.assertFalse(mf.missing())
+
 
 class Test_PEP328(_PEP328):
     def test_pep328(self):
