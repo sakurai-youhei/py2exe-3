@@ -251,8 +251,8 @@ class ModuleFinderTest(unittest.TestCase):
 
             # check for missing and maybe missing modules
             bad, maybe = mf.missing_maybe()
-            self.assertEqual(bad, missing)
-            self.assertEqual(maybe, maybe_missing)
+            self.assertEqual(bad, set(missing))
+            self.assertEqual(maybe, set(maybe_missing))
         finally:
             sys.path = sys_path
             shutil.rmtree(TEST_DIR)
