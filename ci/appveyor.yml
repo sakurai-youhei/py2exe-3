@@ -57,6 +57,9 @@ before_test:
 
   # Install testing requirements
   - "%HELPER_CMD% pip install -r .\\ci\\requirements.txt"
+  # - "flake8 --show-source setup.py"
+  # - "flake8 --show-source py2exe"
+  - "flake8 --show-source tests"
 
 test_script:
 

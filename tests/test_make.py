@@ -1,6 +1,5 @@
 #!/usr/bin/python3.3
 # -*- coding: utf-8 -*-
-from __future__ import division, with_statement, absolute_import, print_function
 
 from py2exe.mf3 import ModuleFinder
 
@@ -11,6 +10,7 @@ import sys
 import textwrap
 import unittest
 
+
 def create_file(path):
     dirname = os.path.dirname(path)
     try:
@@ -19,6 +19,7 @@ def create_file(path):
         if e.errno != errno.EEXIST:
             raise
     return open(path, "w")
+
 
 def create_package(source, test_dir):
     source = textwrap.dedent(source)
@@ -40,11 +41,12 @@ def create_package(source, test_dir):
                 if modname.endswith(".__init__"):
                     modname = modname.rpartition(".__init__")[0]
                 modules.add(modname)
-##                print(modname)
+                # print(modname)
     finally:
         if ofi:
             ofi.close()
     return modules
+
 
 class _TestPackageBase(unittest.TestCase):
     def setUp(self):
@@ -106,6 +108,7 @@ class Test_NamesImport(_TestPackageBase):
         import testmods.test_tools
         with self.assertRaises(ImportError):
             import testmods.tools.spam_and_eggs
+            assert testmods.tools.spam_and_eggs
         for name in self.modules:
             self.assertIn(name, sys.modules)
 
@@ -162,7 +165,11 @@ class Test_NestedStarImports(_TestPackageBase):
     def test_imports(self):
         with self.assertRaises(ImportError):
             import nested.test_tools
+            assert nested.test_tools
         from nested import bar, baz
+        assert bar
+        assert baz
+
 
 class Test_PEP328(_TestPackageBase):
     data = """
@@ -205,19 +212,21 @@ class SimpleTests(unittest.TestCase):
         self.assertNotIn("os.path", mf.missing())
         self.assertNotIn("posix", mf.missing())
 
-
     def test_sys2(self):
         mf = ModuleFinder()
-##        # This raises ImportError:
         with self.assertRaises(ImportError):
+            # This raises ImportError:
             mf.import_hook("os.path")
         self.assertNotIn("os.path", mf.missing())
         self.assertIn("posix", mf.missing())
 
     def test_collections_abc(self):
         from collections import abc
+        assert abc
         import collections.abc
+        assert collections.abc
         from collections import namedtuple
+        assert namedtuple
         with self.assertRaises(ImportError):
             import collections.namedtuple
 
@@ -236,6 +245,7 @@ class SimpleTests(unittest.TestCase):
 
     def test_encodings(self):
         from encodings import big5
+        assert big5
         mf = ModuleFinder()
         mf.import_hook("encodings", None, ["big5"])
         mf.import_hook("encodings", None, ["codecs"])
